@@ -9,6 +9,7 @@ class ApiHelper {
   String? prevPageToken;
   String? query;
   String? channelId;
+  String? playlistId;
   Map<String, dynamic>? options;
   String? regionCode;
   static String baseURL = 'www.googleapis.com';
@@ -47,11 +48,19 @@ class ApiHelper {
     return url;
   }
 
-  Uri channelUri(String channelId, String? order) {
+  Uri channelUri(String playlistId, String? order) {
     this.order = order ?? 'date';
-    this.channelId = channelId;
-    final options = getChannelOption(channelId, this.order!);
-    Uri url = new Uri.https(baseURL, "youtube/v3/search", options);
+    this.channelId = playlistId;
+    final options = getChannelOption(playlistId, this.order!);
+    Uri url = new Uri.https(baseURL, "youtube/v3/playlists", options);
+    return url;
+  }
+
+  Uri playlistUri(String playlistId, String? order) {
+    this.order = order ?? 'date';
+    this.playlistId = playlistId;
+    final options = getPlaylistOption(playlistId, this.order!);
+    Uri url = new Uri.https(baseURL, "youtube/v3/playlistItems", options);
     return url;
   }
 
@@ -157,6 +166,17 @@ class ApiHelper {
       key: value,
       'channelId': channelId,
       "part": "snippet",
+      "maxResults": "${this.maxResults}",
+      "key": "${this.key}",
+    };
+    return options;
+  }
+
+  Map<String, dynamic> getPlaylistOption(String playlistId, String order) {
+    Map<String, dynamic> options = {
+      'playlistId': playlistId,
+      "part": "snippet",
+      'order': this.order,
       "maxResults": "${this.maxResults}",
       "key": "${this.key}",
     };

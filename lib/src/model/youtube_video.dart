@@ -15,13 +15,30 @@ class YouTubeVideo {
 
   YouTubeVideo(dynamic data, {bool getTrendingVideo: false}) {
     thumbnail = Thumbnails.fromMap(data['snippet']['thumbnails']);
+
+    var type = data['kind']?.substring(8) ?? 'channel';
+
+    switch (type) {
+      case 'channel':
+        kind = data['id']['kind'].substring(8);
+        id = data['id'][data['id'].keys.elementAt(1)];
+        break;
+      case 'video':
+        kind = 'video';
+        id = data['id'];
+        break;
+      case 'playlist':
+      case 'playlistItem':
+        kind = 'video';
+        id = data['snippet']['resourceId']['videoId'];
+        break;
+    }
+
     if (getTrendingVideo) {
       kind = 'video';
       id = data['id'];
-    } else {
-      kind = data['id']['kind'].substring(8);
-      id = data['id'][data['id'].keys.elementAt(1)];
     }
+
     url = getURL(kind!, id!);
     publishedAt = data['snippet']['publishedAt'];
     channelId = data['snippet']['channelId'];

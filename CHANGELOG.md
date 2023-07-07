@@ -1,3 +1,5 @@
+## [1.0.4] - August 14th 2020
+Demo Image added
 ## [1.0.3] - August 14th 2020
 Demo Image added
 ## [1.0.3] - August 14th 2020
